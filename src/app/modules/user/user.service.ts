@@ -1,11 +1,10 @@
 import config from '../../config';
-
 import { AcademicSemesterModel } from '../academicSemester/academicSemester.model';
 import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import { UserUtils } from './user.utils';
+import { generateStudentId } from './user.utils';
 
 const createStudentIntoDb = async (password: string, studentData: TStudent) => {
   //if student is already created
@@ -27,7 +26,7 @@ const createStudentIntoDb = async (password: string, studentData: TStudent) => {
     throw new Error('Invalid admission semester');
   }
 
-  userData.id = UserUtils.generateStudentId(admissionSemester);
+  userData.id = await generateStudentId(admissionSemester);
 
   // Create a user
   const newUser = await User.create(userData);
