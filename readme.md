@@ -1,4 +1,4 @@
-# Requirement Analysis and Entity-Relationship (ER) Diagram
+# Requirement Analysis
 
 ## Requirement Analysis
 

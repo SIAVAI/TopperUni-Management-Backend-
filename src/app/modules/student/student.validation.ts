@@ -43,7 +43,7 @@ const createStudentValidationSchema = z.object({
       guardian: guardianSchema,
       localGuardian: localGuardianSchema,
       profileImg: z.string().url('Invalid URL format').optional(),
-      isActive: z.enum(['active', 'blocked']),
+      admissionSemester: z.string(),
     }),
   }),
 });

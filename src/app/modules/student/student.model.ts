@@ -26,6 +26,11 @@ const localGuardianSchema = new Schema({
 
 //const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>({
 const studentSchema = new Schema<TStudent>({
+  id: {
+    type: String,
+    required: [true, 'ID is required'],
+    unique: true,
+  },
   user: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -35,7 +40,7 @@ const studentSchema = new Schema<TStudent>({
   name: userNameSchema,
 
   gender: { type: String, required: true, enum: ['male', 'female'] },
-  dateOfBirth: { type: String },
+  dateOfBirth: { type: Date },
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
@@ -49,16 +54,37 @@ const studentSchema = new Schema<TStudent>({
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
   profileImg: { type: String },
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicSemester',
+  },
+  isDeleted: { type: Boolean, default: false },
 });
 
 studentSchema.pre('save', function (next) {
   next();
 });
 
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-//   return existingUser;
-// };
+// Query Middleware
+// This middleware will run before any find query
+// This middleware will filter out the deleted students
+studentSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 
-// export const Student = model<TStudent, StudentModel>('Student', studentSchema);
+// This middleware will run before any findOne query
+// This middleware will filter out the deleted students
+studentSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+// This middleware will run before any aggregate query
+// This middleware will filter out the deleted students
+studentSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
 export const Student = model<TStudent>('Student', studentSchema);
