@@ -47,6 +47,17 @@ const createStudentIntoDb = async (password: string, studentData: TStudent) => {
   return newStudent;
 };
 
+const getAllUsersFromDB = async () => {
+  const result = User.find();
+  return result;
+};
+const getSingleUserByIdFromDB = async (id: string) => {
+  const result = User.findById(id);
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDb,
+  getAllUsersFromDB,
+  getSingleUserByIdFromDB,
 };
