@@ -5,7 +5,14 @@ import httpStatus from 'http-status';
 import { User } from '../user/user.model';
 
 const getALLStudentsFromDb = async () => {
-  const result = await Student.find();
+  const result = await Student.find()
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
   return result;
 };
 

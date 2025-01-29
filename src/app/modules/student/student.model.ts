@@ -59,6 +59,10 @@ const studentSchema = new Schema<TStudent>({
     ref: 'AcademicSemester',
   },
   isDeleted: { type: Boolean, default: false },
+  academicDepartment: {
+    type: Schema.Types.ObjectId,
+    ref: 'academicDepartment',
+  },
 });
 
 studentSchema.pre('save', function (next) {
